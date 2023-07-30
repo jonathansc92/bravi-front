@@ -70,10 +70,14 @@
               "browserTarget": "bravi-front:build:production"
             },
             "development": {
-              "browserTarget": "bravi-front:build:development"
+              "browserTarget": "bravi-front:build:development",
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "browserTarget": "bravi-front:build",
+            "proxyConfig": "src/proxy.conf.json"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -102,5 +106,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
