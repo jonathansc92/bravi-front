@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  app:
+    build: "."
+    container_name: bravi-front
+    restart: "no"        
+    volumes:
+      - ./:/app
+    command: sh -c "ng serve --host 0.0.0.0"
+    ports:
+      - 4200:4200
+    expose:
+      - 4200
+networks:
+  default:
+    name: bravi
