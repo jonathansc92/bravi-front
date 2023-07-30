@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { PersonRoutingModule } from './person-routing.module';
+import { PersonComponent } from './person.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   declarations: [
-    AppComponent
+    PersonComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    PersonRoutingModule,
     InputSwitchModule,
     ButtonModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [PersonComponent]
 })
-export class AppModule { }
+export class PersonModule { }
