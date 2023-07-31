@@ -3,43 +3,40 @@ import { PersonsApiService } from '../services/persons-api.service';
 import { Persons } from '../models/persons.model';
 import { Table } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
+import { ResponseReturnal } from '../models/responseReturnal.model';
+import { Contacts } from '../models/contacts.model';
+import { ContactsComponent } from '../contacts/contacts.component';
 @Component({
   selector: 'app-persons',
   templateUrl: './persons.component.html',
   styleUrls: ['./persons.component.scss'],
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService, ContactsComponent],
 })
 export class PersonsComponent implements OnInit {
   persons: Persons[];
   person: Persons;
+  contact: Contacts;
+
   selectedPersons!: Persons[] | null;
 
   loading: boolean = true;
   btnLoading: boolean = false;
+
   personDialog: boolean = false;
+  contactDialog: boolean = false;
+
   submitted: boolean = false;
+  submittedContact: boolean = false;
 
-  constructor(private personsApiService: PersonsApiService, private messageService: MessageService, private confirmationService: ConfirmationService) {
+  constructor(private personsApiService: PersonsApiService, private contactComponent: ContactsComponent, private messageService: MessageService, private confirmationService: ConfirmationService) {
     this.persons = [];
-    this.person = {
-      id: any,
-      name: ''
-    };
-
-    this.getPersons();
+    this.person = {};
+    this.person.contacts = [];
+    this.contact = {};
   }
 
-  ngOnInit(): void { }
-
-  getPersons() {
-    this.personsApiService.getPersons().subscribe(data => {
-      this.persons = data.data;
-      this.loading = false;
-      console.log(this.persons)
-    }, err => {
-      console.log(err)
-    })
+  ngOnInit(): void {
+    this.getPersons();
   }
 
   getEventValue($event: any): string {
@@ -50,78 +47,113 @@ export class PersonsComponent implements OnInit {
     table.clear();
   }
 
+  hideDialog() {
+    this.personDialog = false;
+    this.contactDialog = false;
+    this.submitted = false;
+  }
+
   openNew() {
-    this.person = {
-      id: 0,
-      name: ''
-    };
+    this.person = {};
     this.submitted = false;
     this.personDialog = true;
   }
 
-  deleteSelectedPersons() {
-    // this.confirmationService.confirm({
-    //     message: 'Are you sure you want to delete the selected products?',
-    //     header: 'Confirm',
-    //     icon: 'pi pi-exclamation-triangle',
-    //     accept: () => {
-    //         this.persons = this.products.filter((val) => !this.selectedProducts?.includes(val));
-    //         this.selectedProducts = null;
-    //         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    //     }
-    // });
+  editPerson(person: Persons) {
+    this.person = { ...person };
+    this.personDialog = true;
   }
 
-  hideDialog() {
-    this.personDialog = false;
+  openNewContact(personId: number) {
+    this.contact = {};
+    this.person.id = personId;
     this.submitted = false;
+    this.contactDialog = true;
+  }
+
+  editContact(contact: Contacts) {
+    this.contact = { ...contact };
+    this.contactDialog = true;
+  }
+
+  saveContact() {
+    this.contact.person_id = this.person.id;
+    this.contactComponent.saveContact(this.contact);
+  }
+
+  deleteContact(id: number) {
+    this.contactComponent.delete(id);
+  }
+
+  getPersons() {
+    this.personsApiService.getPersons().subscribe(data => {
+      this.persons = data.data;
+      this.loading = false;
+    }, err => {
+      this.messageService.add({ severity: 'error  ', summary: 'Erro', detail: err.message, life: 3000 });
+    })
   }
 
   savePerson() {
     this.submitted = true;
     this.btnLoading = true;
-    console.log(this.person)
-    // if (this.person.name?.trim()) {
-    //   if (this.person.id) {
-    //     // this.persons[this.findIndexById(this.person.id)] = this.person;
-    //   } else {
-    //     this.person.id = this.createId();
-    //     this.persons.push(this.person);
-    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-    //   }
 
-    this.personsApiService.create(this.person).subscribe(data => {
-      console.log(data)
-      this.persons = [...this.persons];
-      this.personDialog = false;
-      this.messageService.add({ severity: 'success', summary: '', detail: 'Salvo', life: 3000 });
-      this.btnLoading = false;
-    }, err => {
-      console.log(err)
-      this.messageService.add({ severity: 'error  ', summary: '', detail: 'Salvo', life: 3000 });
-      this.btnLoading = false;
-    })
+    if (this.person?.name) {
+      if (this.person.id) {
+        this.personsApiService.update(this.person.id, this.person).subscribe((data: ResponseReturnal) => {
+          this.persons[this.findIndexById(this.person.id)] = this.person;
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: data.message, life: 3000 });
+          this.persons.push(data.data);
 
+          this.personDialog = false;
+          this.persons = [...this.persons];
+        }, err => {
+          this.messageService.add({ severity: 'error  ', summary: 'Erro', detail: err.message, life: 3000 });
 
+          this.btnLoading = false;
+        })
+      } else {
+        this.personsApiService.create(this.person).subscribe((data: ResponseReturnal) => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: data.message, life: 3000 });
+          this.persons.push(data.data);
+          this.personDialog = false;
+          this.persons = [...this.persons];
+        }, err => {
+          this.messageService.add({ severity: 'error  ', summary: 'Erro', detail: err.message, life: 3000 });
+        })
+      }
+    } else {
+      this.messageService.add({ severity: 'error  ', summary: 'Erro', detail: 'Campo nome é obrigatório', life: 3000 });
+    }
+
+    this.btnLoading = false;
   }
 
-  // findIndexById(id: string): number {
-  //   let index = -1;
-  //   for (let i = 0; i < this.persons.length; i++) {
-  //     if (this.persons[i].id === id) {
-  //       index = i;
-  //       break;
-  //     }
-  //   }
-  //   return index;
-  // }
+  delete(id: number) {
+    this.confirmationService.confirm({
+      message: 'Deseja remover a pessoa?',
+      header: 'Remover',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.personsApiService.delete(id).subscribe((data: ResponseReturnal) => {
+          this.persons = this.persons.filter((val) => val.id !== id);
+          this.person = {};
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: data.message, life: 3000 });
+        }, err => {
+          this.messageService.add({ severity: 'error  ', summary: 'Erro', detail: err.message, life: 3000 });
+        })
+      }
+    });
+  }
 
-  // createId(): string {
-  //   let id = '';
-  //   var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  //   for (var i = 0; i < 5; i++) {
-  //     id += chars.charAt(Math.floor(Math.random() * chars.length));
-  //   }
-  //   return id;
-  // }
+  findIndexById(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.persons.length; i++) {
+      if (this.persons[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
 }

@@ -11,6 +11,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -19,6 +20,7 @@ import { ToastModule } from 'primeng/toast';
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PersonsApiService } from './services/persons-api.service';
+import { ContactsApiService } from './services/contacts-api.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,7 @@ import { PersonsApiService } from './services/persons-api.service';
     HttpClientModule,
     TableModule,
     InputTextModule,
+    InputMaskModule,
     ToolbarModule,
     DialogModule,
     ConfirmDialogModule,
@@ -42,6 +45,7 @@ import { PersonsApiService } from './services/persons-api.service';
   ],
   providers: [
     PersonsApiService,
+    ContactsApiService,
     HttpClient
   ],
   bootstrap: [AppComponent]
