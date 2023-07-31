@@ -6,6 +6,11 @@
         </p>
     </div>
     <div class="flex justify-content-center">
+        <p>
+            Clique no ícone <span class="p-button-icon pi pi-chevron-right"></span> , na linha de cada pessoa da tabela, para expandir os contatos de cada pessoa
+        </p>
+    </div>
+    <div class="flex justify-content-center">
         <p-table #dt [value]="persons" [rowHover]="true" [rows]="5" [showCurrentPageReport]="true"
             [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
             [tableStyle]="{ 'min-width': '75rem' }"
