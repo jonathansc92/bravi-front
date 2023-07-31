@@ -1,7 +1,10 @@
-export class Persons {
-    public name: string[];
+import { IPersons } from "./persons.interface";
 
-    constructor() {
-        this.name = [];
-      }
+export class Persons {
+    public id?: any;
+    public name?: string;
+
+    constructor(data: IPersons) {
+      Object.assign(this, data);
+    }
 }
