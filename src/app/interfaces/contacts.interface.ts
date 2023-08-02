@@ -1,4 +1,4 @@
-export interface Contacts {
+export interface IContacts {
   id?: any;
   phone?: string;
   whatsapp?: string;

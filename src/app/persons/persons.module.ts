@@ -11,10 +11,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 
-import { PersonsApiService } from '../services/persons-api.service';
-
 import { PersonsComponent } from './persons.component';
 import { ContactsModule } from '../contacts/contacts.module';
+import { StoreModule } from '@ngrx/store';
+import { personsLstReducer } from 'src/app/store/persons/persons.reducer ';
+import { EffectsModule } from '@ngrx/effects';
+import { PersonsEffect } from '../store/persons/persons.effect';
 
 @NgModule({
   declarations: [
@@ -32,11 +34,14 @@ import { ContactsModule } from '../contacts/contacts.module';
     ConfirmDialogModule,
     FormsModule,
     ToastModule,
-    ContactsModule
+    ContactsModule,
+    StoreModule.forRoot({
+      persons: personsLstReducer
+    }, {}),
+    EffectsModule.forRoot([PersonsEffect])
+
   ],
-  providers: [
-    PersonsApiService
-  ],
+  providers: [],
   exports: [
     PersonsComponent
   ]

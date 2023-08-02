@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactsApiService } from '../services/contacts-api.service';
-import { Contacts } from '../models/contacts.model';
+import { IContacts } from '../interfaces/contacts.interface';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ResponseReturnal } from '../models/responseReturnal.model';
+import { ResponseReturnal } from '../interfaces/responseReturnal.model';
 
 @Component({
   selector: 'app-contacts',
@@ -11,8 +11,8 @@ import { ResponseReturnal } from '../models/responseReturnal.model';
   providers: [MessageService, ConfirmationService],
 })
 export class ContactsComponent implements OnInit {
-  contacts: Contacts[];
-  contact: Contacts;
+  contacts: IContacts[];
+  contact: IContacts;
 
   constructor(private ContactsApiService: ContactsApiService, private messageService: MessageService, private confirmationService: ConfirmationService) {
     this.contacts = [];
@@ -21,11 +21,11 @@ export class ContactsComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  editContact(contact: Contacts) {
+  editContact(contact: IContacts) {
     this.contact = { ...contact };
   }
 
-  saveContact(contactData: Contacts) {
+  saveContact(contactData: IContacts) {
     if (contactData.id) {
       this.ContactsApiService.update(contactData.id, contactData).subscribe((data: ResponseReturnal) => {
         this.messageService.add({ severity: 'success', summary: '', detail: data.message, life: 3000 });

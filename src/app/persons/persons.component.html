@@ -5,7 +5,29 @@
             Cadastro de Pessoas
         </p>
     </div>
-    <div class="flex justify-content-center">
+    <ng-container
+    *ngIf="persons$ | async as persons">
+{{ persons | json }}
+    <!-- <div class="container">
+        <table>
+            <th>ID</th>
+            <th>Name</th>
+            <tbody>
+            <tr *ngFor="let person of persons.data">
+                <td>{{person.id}}</td>
+                <td>{{person.name}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div> -->
+</ng-container>
+    <!-- {{ persons$ | async }} -->
+    <!-- <ng-container *ngIf="{
+        persons: persons$ | async,
+    } as data">
+    {{data}}
+    </ng-container> -->
+    <!-- <div class="flex justify-content-center">
         <p>
             Clique no ícone <span class="p-button-icon pi pi-chevron-right"></span> , na linha de cada pessoa da tabela, para expandir os contatos de cada pessoa
         </p>
@@ -142,5 +164,5 @@
                 [loading]="btnLoading" loadingIcon="pi pi-bell"></button>
         </ng-template>
     </p-dialog>
-    <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+    <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog> -->
 </div>

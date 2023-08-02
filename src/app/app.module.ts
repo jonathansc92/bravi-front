@@ -4,8 +4,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PersonsModule } from './persons/persons.module';
-
 import { AppComponent } from './app.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -16,7 +16,10 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    PersonsModule
+    PersonsModule,
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+    })
   ],
   providers: [
     HttpClient
