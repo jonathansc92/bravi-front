@@ -103,8 +103,6 @@ export class PersonsComponent implements OnInit {
         this.personsApiService.update(this.person.id, this.person).subscribe((data: ResponseReturnal) => {
           this.persons[this.findIndexById(this.person.id)] = this.person;
           this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: data.message, life: 3000 });
-          this.persons.push(data.data);
-
           this.personDialog = false;
           this.persons = [...this.persons];
         }, err => {
