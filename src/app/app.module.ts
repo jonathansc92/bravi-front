@@ -6,6 +6,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PersonsModule } from './persons/persons.module';
 import { AppComponent } from './app.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import { appEffects, appReducer } from './store/app.state';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -17,9 +20,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     AppRoutingModule,
     HttpClientModule,
     PersonsModule,
-    StoreDevtoolsModule.instrument({
-      maxAge: 25,
-    })
+    StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot(appEffects),
+    StoreDevtoolsModule.instrument(),
   ],
   providers: [
     HttpClient

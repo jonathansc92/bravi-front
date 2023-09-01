@@ -5,22 +5,20 @@
             Cadastro de Pessoas
         </p>
     </div>
-    <ng-container
-    *ngIf="persons$ | async as persons">
-{{ persons | json }}
-    <!-- <div class="container">
-        <table>
-            <th>ID</th>
-            <th>Name</th>
-            <tbody>
-            <tr *ngFor="let person of persons.data">
-                <td>{{person.id}}</td>
-                <td>{{person.name}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div> -->
-</ng-container>
+    <ng-container *ngIf="persons$ | async as persons">
+        <div class="container">
+            <table>
+                <th>ID</th>
+                <th>Name</th>
+                <tbody>
+                    <tr *ngFor="let person of persons">
+                        <td>{{person.data.id}}</td>
+                        <td>{{person.data.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
     <!-- {{ persons$ | async }} -->
     <!-- <ng-container *ngIf="{
         persons: persons$ | async,

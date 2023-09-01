@@ -14,7 +14,7 @@ import { ToastModule } from 'primeng/toast';
 import { PersonsComponent } from './persons.component';
 import { ContactsModule } from '../contacts/contacts.module';
 import { StoreModule } from '@ngrx/store';
-import { personsLstReducer } from 'src/app/store/persons/persons.reducer ';
+import { personsReducer } from 'src/app/store/persons/persons.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { PersonsEffect } from '../store/persons/persons.effect';
 
@@ -36,7 +36,7 @@ import { PersonsEffect } from '../store/persons/persons.effect';
     ToastModule,
     ContactsModule,
     StoreModule.forRoot({
-      persons: personsLstReducer
+      persons: personsReducer
     }, {}),
     EffectsModule.forRoot([PersonsEffect])
 

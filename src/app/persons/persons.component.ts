@@ -3,11 +3,11 @@ import { IPersons } from '../interfaces/persons.interface';
 import { Table } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { IContacts } from '../interfaces/contacts.interface';
-import { Store, select } from '@ngrx/store';
-import { selectBooks } from 'src/app/store/persons/persons.selectors';
-import { Observable } from 'rxjs';
-import { getPersons } from '../store/persons/persons.actions';
-
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.state';
+import * as fromPersonsAction from '../store/persons/persons.actions';
+import { Observable, from } from 'rxjs';
+import { getPersons } from '../store/persons/persons.selectors';
 @Component({
   selector: 'app-persons',
   templateUrl: './persons.component.html',
@@ -15,9 +15,8 @@ import { getPersons } from '../store/persons/persons.actions';
   providers: [MessageService, ConfirmationService],
 })
 export class PersonsComponent implements OnInit {
-  persons$: Observable<IPersons[]>;
-  contact: IContacts;
-
+  persons$: Observable<IPersons[]> = this.store.select(getPersons);
+  
   selectedPersons!: IPersons[] | null;
 
   loading: boolean = true;
@@ -29,14 +28,14 @@ export class PersonsComponent implements OnInit {
   submitted: boolean = false;
   submittedContact: boolean = false;
 
-  constructor(private store: Store, private messageService: MessageService, private confirmationService: ConfirmationService) {
-    this.store.dispatch(getPersons());
-    this.persons$ = this.store.pipe(select(selectBooks));
-    this.contact = {};
-  }
+  constructor(
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private store: Store<AppState>
+  ) { }
 
   ngOnInit(): void {
-    this.getPersons();
+    this.store.dispatch(fromPersonsAction.LoadPersons());
   }
 
   getEventValue($event: any): string {
@@ -63,16 +62,16 @@ export class PersonsComponent implements OnInit {
     this.personDialog = true;
   }
 
-  openNewContact(personId: number) {
-    this.contact = {};
-    this.submitted = false;
-    this.contactDialog = true;
-  }
+  // openNewContact(personId: number) {
+  //   this.contact = {};
+  //   this.submitted = false;
+  //   this.contactDialog = true;
+  // }
 
-  editContact(contact: IContacts) {
-    this.contact = { ...contact };
-    this.contactDialog = true;
-  }
+  // editContact(contact: IContacts) {
+  //   this.contact = { ...contact };
+  //   this.contactDialog = true;
+  // }
 
   saveContact() {
     // this.contact.person_id = this.person.id;
